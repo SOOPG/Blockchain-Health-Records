@@ -8,23 +8,45 @@
 
 using namespace std;
 
-/*
-void createBlockRecord(){
+    //create a public information
+    struct BlockInformation{
 
-    //create a block
-    struct Block{
-    int blockNumber;
-    int currentBlockHash;
-    int previousBlockHash;
+    time_t timestamp;
+    //EmployeeID
+    int employeeID;
 
-    //Timestamp
+    //Name:
+    string personName;
 
+    //Employment Type (Full-Time,Contract,Part Time)
+    string employmentType;
+
+    //Department (Hospital Departments)
+    string departmentName;
+
+    //Branch Name and Location
+    string branchName;
+    string branchLocation;
 
     };
 
-}
-*/
+    class Block{
 
+    private:
+        int blockIndex;
+        size_t currentBlockHash;
+        size_t previousBlockHash;
+
+
+    public:
+        //Constructor
+        Block(int blockIndex,size_t currentBlockHash,size_t previousBlockHash,BlockInformation block);
+        //Get Original Hash
+        size_t getHash();
+        //Get Previous Hash
+        size_t getPreviousHash();
+
+    };
 
 //display blockchain
 void displayBlockChain(){
