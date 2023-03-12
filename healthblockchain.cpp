@@ -9,7 +9,7 @@
 using namespace std;
 
     //create a public information
-    struct BlockInformation{
+struct EmployeeData{
 
     time_t timestamp;
     //EmployeeID
@@ -25,42 +25,159 @@ using namespace std;
     string departmentName;
 
     //Branch Name and Location
-    string branchName;
     string branchLocation;
 
-    };
+};
 
-    class Block{
+class Block{
 
     private:
+        //INDEX
         int blockIndex;
+        //current hashed block
         size_t currentBlockHash;
+        //previous hashed block
         size_t previousBlockHash;
+        //generate the hash
+        size_t generateHash();
 
 
     public:
-        //Constructor
-        Block(int blockIndex,size_t currentBlockHash,size_t previousBlockHash,BlockInformation block);
+        //Constructor for block
+        Block(int blockIndex,size_t previousBlockHash,EmployeeData d);
         //Get Original Hash
         size_t getHash();
         //Get Previous Hash
         size_t getPreviousHash();
+        //Employee Data
+        EmployeeData data;
 
-    };
+        //Validate Hash
+        bool isHashValid();
+};
 
-//display blockchain
+//Constructor of block
+Block::Block(int idx,size_t previousBlockHash,EmployeeData d){
+
+blockIndex=idx;
+data=d;
+previousBlockHash=previousBlockHash;
+currentBlockHash=generateHash();
+}
+
+//To generate hashs
+size_t Block::generateHash(){
+
+    hash<string> hash1;
+    hash<size_t> hash2;
+    hash<size_t> finalHash;
+    string toHash = to_string(data.employeeID)+ to_string(data.timestamp);
+
+    return finalHash(hash1(toHash)+hash2(previousBlockHash));
+}
+
+size_t Block::getHash(){
+    return currentBlockHash;
+}
+
+size_t Block::getPreviousHash(){
+    return previousBlockHash;
+}
+
+bool Block::isHashValid(){
+    return generateHash()==currentBlockHash;
+}
+
+
+//Blockchain Class
+class Blockchain{
+
+    private:
+        Block createGenesisBlock();
+
+    public:
+        //chain
+        vector<Block> chain;
+        Blockchain();
+
+        void addBlock(EmployeeData data);
+        bool isChainValid();
+
+        Block *getLatestBlock();
+
+};
+
+//Blockchain Constructor
+Blockchain::Blockchain(){
+    Block genesis=createGenesisBlock();
+    chain.push_back(genesis);
+
+}
+
+//create first block (Genesis) of chain
+Block Blockchain::createGenesisBlock(){
+
+    time_t current;
+    EmployeeData employee1;
+    employee1.employeeID=2522;
+    employee1.personName="Shannon Lee Chung Jin";
+    employee1.employmentType="Contract";
+    employee1.departmentName="Administration";
+    employee1.branchLocation="Semenyih, Selangor";
+    employee1.timestamp=time(&current);
+
+    hash<int>hash1;
+    Block genesis(1,hash1(1),employee1);
+    return genesis;
+}
+
+//Get the latest added block
+Block *Blockchain::getLatestBlock(){
+    return &chain.back();
+}
+
+
+//Add a new block to blockchain
+void Blockchain::addBlock(EmployeeData d){
+    int index = (int)chain.size()-1;
+    Block newBlock(index, getLatestBlock()->getHash(),d);
+}
+
+//Check if the chain is valid
+bool Blockchain::isChainValid(){
+
+    vector<Block>::iterator it;
+    int chainLen=(int)chain.size();
+
+    for (it=chain.begin(); it !=chain.end();++it){
+        Block currentBlock=*it;
+
+        if(!currentBlock.isHashValid()){
+            return false;
+        }
+
+        if(chainLen>1){
+            Block previousBlock=*(it-1);
+            if(currentBlock.getPreviousHash()!=previousBlock.getHash()){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void displayBlockChain(){
 
-    cout<<"BlockChain Displayed"<<endl;
+
 
 }
 
 //display main menu of program
-void displayMainMenu(int programStatus){
+void displayMainMenu(int programStatus,EmployeeData){
 
     while(programStatus==1){
         cout<<""<<endl;
-        cout<<"Welcome to Health Blockchain"<<endl;
+        cout<<"Welcome to Medical Record Block Chain"<<endl;
         cout<<"Please select your option"<<endl;
 
         cout<<""<<endl;
@@ -101,49 +218,24 @@ void displayMainMenu(int programStatus){
 
 int main (){
 
-    displayMainMenu(1);
+
+    //Start Blockchain
+    Blockchain MedicalRecord;
+
+    //Added 1st Block (genesis) data
+    EmployeeData employee1;
+    time_t employe1Time;
+    employee1.employeeID=2522;
+    employee1.personName="Shannon Lee Chung Jin";
+    employee1.employmentType="Contract";
+    employee1.departmentName="Administration";
+    employee1.branchLocation="Semenyih, Selangor";
+    employee1.timestamp=time(&employe1Time);
+
+    MedicalRecord.addBlock(employee1);
+    cout<<"Is chain valid?"<<endl;
+    cout<<MedicalRecord.isChainValid()<<endl;
 
 
-}
-
-
-void createNodeReference(){
-
-/*
-     //One block
-    struct node{
-    int data;
-    node* next;
-    };
-
-    node* n;
-    node* temp;
-    node* head;
-
-    n=new node;
-    n->data=1;
-
-    temp=n;
-    //head of linked list
-    head=n;
-
-    //adding new node
-    n=new node;
-    n->data=2;
-
-    //linking to next node (extending)
-    temp->next=n;
-    //move temp to 2nd node
-    temp=temp->next;
-
-    //3rd node
-    n=new node;
-    n->data=3;
-    temp->next=n;
-
-    n=new node;
-    n->data=4;
-    temp->next=n;
-    n->next=NULL;
-    */
+    //displayMainMenu(1,EmployeeData);
 }
