@@ -1,8 +1,30 @@
+//function to manipulate date time objects
 #include <ctime>
-#include <vector>
 #include <iostream>
+#include <stdlib.h>
+//function to not need allocate memory
+#include <vector>
+
 
 using namespace std;
+
+/*
+void createBlockRecord(){
+
+    //create a block
+    struct Block{
+    int blockNumber;
+    int currentBlockHash;
+    int previousBlockHash;
+
+    //Timestamp
+
+
+    };
+
+}
+*/
+
 
 //display blockchain
 void displayBlockChain(){
@@ -59,4 +81,47 @@ int main (){
 
     displayMainMenu(1);
 
+
+}
+
+
+void createNodeReference(){
+
+/*
+     //One block
+    struct node{
+    int data;
+    node* next;
+    };
+
+    node* n;
+    node* temp;
+    node* head;
+
+    n=new node;
+    n->data=1;
+
+    temp=n;
+    //head of linked list
+    head=n;
+
+    //adding new node
+    n=new node;
+    n->data=2;
+
+    //linking to next node (extending)
+    temp->next=n;
+    //move temp to 2nd node
+    temp=temp->next;
+
+    //3rd node
+    n=new node;
+    n->data=3;
+    temp->next=n;
+
+    n=new node;
+    n->data=4;
+    temp->next=n;
+    n->next=NULL;
+    */
 }
