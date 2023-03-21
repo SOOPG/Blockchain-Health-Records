@@ -52,6 +52,17 @@ class Block{
         //Employee Data
         EmployeeData data;
 
+         string getDataString(){
+            string dataStr = "";
+            dataStr += "Employee ID: " + to_string(data.employeeID) + "\n";
+            dataStr += "Name: " + data.personName + "\n";
+            dataStr += "Employment Type: " + data.employmentType + "\n";
+            dataStr += "Department: " + data.departmentName + "\n";
+            dataStr += "Branch Location: " + data.branchLocation + "\n";
+            dataStr += "Timestamp: " + string(ctime(&data.timestamp));
+            return dataStr;
+        }
+
         //Validate Hash
         bool isHashValid();
 };
@@ -116,18 +127,21 @@ Blockchain::Blockchain(){
 
 //create first block (Genesis) of chain
 Block Blockchain::createGenesisBlock(){
-
-    time_t current;
     EmployeeData employee1;
     employee1.employeeID=0;
     employee1.personName="";
     employee1.employmentType="";
     employee1.departmentName="";
     employee1.branchLocation="";
-    employee1.timestamp=time(&current);
 
-    hash<int>hash1;
-    Block genesis(1,hash1(1),employee1);
+    time_t current;
+    time(&current);
+    employee1.timestamp=current;
+
+    hash<string>hash1;
+    string hashStr = "genesis";
+    size_t previousBlockHash = hash1(hashStr);
+    Block genesis(1, previousBlockHash, employee1);
     return genesis;
 }
 
@@ -138,8 +152,9 @@ Block *Blockchain::getLatestBlock(){
 
 //Add a new block to block chain
 void Blockchain::addBlock(EmployeeData d){
-    int index = (int)chain.size()-1;
-    Block newBlock(index, getLatestBlock()->getPreviousHash(),d);
+    int index = (int)chain.size();
+    Block newBlock(index, getLatestBlock()->getHash(), d);
+    chain.push_back(newBlock);
 }
 
 //Check if the chain is valid
@@ -165,90 +180,36 @@ bool Blockchain::isChainValid(){
     return true;
 }
 
-//display main menu of program
-void displayMainMenu(int programStatus,EmployeeData){
-
-    while(programStatus==1){
-        cout<<""<<endl;
-        cout<<"Welcome to Medical Record Block Chain"<<endl;
-        cout<<"Please select your option"<<endl;
-
-        cout<<""<<endl;
-        cout<<"1.Display Block Chain"<<endl;
-        cout<<"2.Modify Block Chain"<<endl;
-        cout<<"3.Exit"<<endl;
-        cout<<"____________________________"<<endl;
-        cout<<""<<endl;
-
-        //Allow user to select in menu
-        cout<<"Option:";
-        int menuOption;
-        cin>>menuOption;
-        cout<<"____________________________"<<endl;
-
-        switch(menuOption){
-            case 1:
-                //display blockchain
-                cout<<"____________________________"<<endl;
-                break;
-            case 2:
-                //modify blockchain
-                cout<<"____________________________"<<endl;
-                break;
-            case 3:
-                programStatus=0;
-                cout<<""<<endl;
-                cout<<"Thank you for using our service!"<<endl;
-                cout<<"____________________________"<<endl;
-                break;
-            default:
-                cout<<"Error! Please Select Option Number"<<endl;
-                cout<<"____________________________"<<endl;
-        }
-    }
-}
-
 int main (){
-
 
     //Start Blockchain
     Blockchain MedicalRecord;
 
     //Added 1st Block (genesis) data
     EmployeeData employee1;
-    time_t employe1Time;
+    time_t employee1Time;
     employee1.employeeID=2522;
     employee1.personName="Shannon Lee Chung Jin";
     employee1.employmentType="Contract";
     employee1.departmentName="Administration";
     employee1.branchLocation="Semenyih, Selangor";
-    employee1.timestamp=time(&employe1Time);
+    employee1.timestamp=time(&employee1Time);
     MedicalRecord.addBlock(employee1);
 
-    EmployeeData employee2;
-    time_t employe2Time;
-    employee2.employeeID=2433;
-    employee2.personName="Addeel Naheeh";
-    employee2.employmentType="Full-Time";
-    employee2.departmentName="General Practitioner";
-    employee2.branchLocation="Semenyih, Selangor";
-    employee2.timestamp=time(&employe2Time);
-    MedicalRecord.addBlock(employee2);
-
-    EmployeeData employee3;
-    time_t employe3Time;
-    employee3.employeeID=3161;
-    employee3.personName="Jane";
-    employee3.employmentType="Part-Time";
-    employee3.departmentName="Receptionist";
-    employee3.branchLocation="Semenyih, Selangor";
-    employee3.timestamp=time(&employe3Time);
-    MedicalRecord.addBlock(employee3);
+// Display the current and previous hash for each block in the chain
+    for (int i = 0; i < MedicalRecord.chain.size(); i++) {
+        cout << "Block " << i << ":" << endl;
+        cout << "Current Hash: " << MedicalRecord.chain[i].getHash() << endl;
+        cout << "Previous Hash: " << MedicalRecord.chain[i].getPreviousHash() << endl;
+        cout << "__________Data__________" << endl;
+        cout << MedicalRecord.chain[i].getDataString()<< endl;
+        cout << "________________________" << endl;
+        cout <<""<<endl;
+    }
 
 
     cout<<"Is chain valid?"<<endl;
     cout<<MedicalRecord.isChainValid()<<endl;
 
-
-    //displayMainMenu(1,EmployeeData);
+    return 0;
 }
