@@ -52,6 +52,7 @@ class Block{
         //Employee Data
         EmployeeData data;
 
+        //Get the data
          string getDataString(){
             string dataStr = "";
             dataStr += "Employee ID: " + to_string(data.employeeID) + "\n";
@@ -70,9 +71,13 @@ class Block{
 //Constructor of block
 Block::Block(int idx,size_t previousBlockHash,EmployeeData d){
 
+    //Position of Block
     blockIndex=idx;
+    //Data in the Block
     data=d;
+    //Access the previous block hash
     this->previousBlockHash=previousBlockHash;
+    //Generate Hash for current block
     currentBlockHash=generateHash();
 }
 
@@ -127,6 +132,7 @@ Blockchain::Blockchain(){
 
 //create first block (Genesis) of chain
 Block Blockchain::createGenesisBlock(){
+
     EmployeeData employee1;
     employee1.employeeID=0;
     employee1.personName="";
