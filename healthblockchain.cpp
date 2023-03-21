@@ -34,8 +34,7 @@ class Block{
     private:
         //INDEX
         int blockIndex;
-        //current hashed block
-        size_t currentBlockHash;
+
         //previous hashed block
         size_t previousBlockHash;
         //generate the hash
@@ -47,6 +46,8 @@ class Block{
         Block(int blockIndex,size_t previousBlockHash,EmployeeData d);
         //Get Original Hash
         size_t getHash();
+        //current hashed block
+        size_t currentBlockHash;
         //Get Previous Hash
         size_t getPreviousHash();
         //Employee Data
@@ -147,7 +148,9 @@ Block Blockchain::createGenesisBlock(){
     hash<string>hash1;
     string hashStr = "genesis";
     size_t previousBlockHash = hash1(hashStr);
+    size_t currentBlockHash = hash1(hashStr);  // current hash is equal to previous hash
     Block genesis(1, previousBlockHash, employee1);
+    genesis.currentBlockHash = currentBlockHash;  // set the current hash of genesis block to be equal to the previous hash of the same block
     return genesis;
 }
 
@@ -201,6 +204,18 @@ int main (){
     employee1.branchLocation="Semenyih, Selangor";
     employee1.timestamp=time(&employee1Time);
     MedicalRecord.addBlock(employee1);
+
+    /*
+    EmployeeData employee2;
+    time_t employee2Time;
+    employee2.employeeID=3255;
+    employee2.personName="Adil Lahil";
+    employee2.employmentType="Full-Time";
+    employee2.departmentName="Administration";
+    employee2.branchLocation="Semenyih, Selangor";
+    employee2.timestamp=time(&employee2Time);
+    MedicalRecord.addBlock(employee2);
+    */
 
 // Display the current and previous hash for each block in the chain
     for (int i = 0; i < MedicalRecord.chain.size(); i++) {
