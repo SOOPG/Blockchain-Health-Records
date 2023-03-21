@@ -70,10 +70,10 @@ class Block{
 //Constructor of block
 Block::Block(int idx,size_t previousBlockHash,EmployeeData d){
 
-blockIndex=idx;
-data=d;
-previousBlockHash=previousBlockHash;
-currentBlockHash=generateHash();
+    blockIndex=idx;
+    data=d;
+    this->previousBlockHash=previousBlockHash;
+    currentBlockHash=generateHash();
 }
 
 //To generate hashes
