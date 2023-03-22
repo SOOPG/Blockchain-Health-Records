@@ -27,6 +27,11 @@ struct EmployeeData{
     //Branch Name and Location
     string branchLocation;
 
+    string pastShift;
+    string currentShift;
+    string upcomingShift;
+    string extraDetails;
+
 };
 
 class Block{
@@ -54,15 +59,29 @@ class Block{
         EmployeeData data;
 
         //Get the data
-         string getDataString(){
-            string dataStr = "";
-            dataStr += "Employee ID: " + to_string(data.employeeID) + "\n";
-            dataStr += "Name: " + data.personName + "\n";
-            dataStr += "Employment Type: " + data.employmentType + "\n";
-            dataStr += "Department: " + data.departmentName + "\n";
-            dataStr += "Branch Location: " + data.branchLocation + "\n";
-            dataStr += "Timestamp: " + string(ctime(&data.timestamp));
-            return dataStr;
+         string getEmployeeData(){
+            string employeeData = "";
+            employeeData += "Employee ID: " + to_string(data.employeeID) + "\n";
+            employeeData += "Name: " + data.personName + "\n";
+            employeeData += "Employment Type: " + data.employmentType + "\n";
+            employeeData += "Department: " + data.departmentName + "\n";
+            employeeData += "Branch Location: " + data.branchLocation + "\n";
+            employeeData += "Timestamp: " + string(ctime(&data.timestamp));
+            return employeeData;
+        }
+
+        string getEmployeeShift(){
+            string employeeShift = "";
+            employeeShift +="Previous Shift: " + data.pastShift + "\n";
+            employeeShift +="Current Shift: " + data.currentShift + "\n";
+            employeeShift +="Next Shift: " + data.upcomingShift + "\n";
+            return employeeShift;
+        }
+
+        string getEmployeeExtraInfo(){
+        string employeeExtraInfo= "";
+         employeeExtraInfo += "More Details: "+ data.extraDetails + "\n";
+        return employeeExtraInfo;
         }
 
         //Validate Hash
@@ -167,29 +186,6 @@ void Blockchain::addBlock(EmployeeData d){
     chain.push_back(newBlock);
 }
 
-//Check if the chain is valid
-bool Blockchain::isChainValid(){
-
-    vector<Block>::iterator it;
-    int chainLen=(int)chain.size();
-
-    for (it=chain.begin(); it !=chain.end();++it){
-        Block currentBlock=*it;
-
-        if(!currentBlock.isHashValid()){
-            return false;
-        }
-
-        if(chainLen>1){
-            Block previousBlock=*(it-1);
-            if(currentBlock.getPreviousHash()!=previousBlock.getHash()){
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
 int main (){
 
     //Start Blockchain
@@ -201,22 +197,85 @@ int main (){
     employee1.employeeID=2522;
     employee1.personName="Shannon Lee Chung Jin";
     employee1.employmentType="Contract";
-    employee1.departmentName="Administration";
+    employee1.departmentName="Administration-Receptionist";
     employee1.branchLocation="Semenyih, Selangor";
     employee1.timestamp=time(&employee1Time);
+    employee1.pastShift="9.00am-11.00am";
+    employee1.currentShift="3.00pm-5.00pm";
+    employee1.upcomingShift="8.00pm-10.00pm";
+    employee1.extraDetails="Attend to customers/patients at the lobby of hospital";
     MedicalRecord.addBlock(employee1);
 
-    /*
+
     EmployeeData employee2;
     time_t employee2Time;
     employee2.employeeID=3255;
     employee2.personName="Adil Lahil";
     employee2.employmentType="Full-Time";
-    employee2.departmentName="Administration";
+    employee2.departmentName="ER-Nurse";
     employee2.branchLocation="Semenyih, Selangor";
     employee2.timestamp=time(&employee2Time);
+    employee2.pastShift="12.00am-2.00am";
+    employee2.currentShift="6.00am-8.00am";
+    employee2.upcomingShift="10.00am-12.00pm";
+    employee2.extraDetails="Responsible for Emergency Responses";
     MedicalRecord.addBlock(employee2);
-    */
+
+    EmployeeData employee3;
+    time_t employee3Time;
+    employee3.employeeID=5591;
+    employee3.personName="Amry Ganle";
+    employee3.employmentType="Intern";
+    employee3.departmentName="Administration-Assistant Secretary";
+    employee3.branchLocation="Semenyih, Selangor";
+    employee3.timestamp=time(&employee3Time);
+    employee3.pastShift="8.00am-3pm";
+    employee3.currentShift="8.00am-3pm";
+    employee3.upcomingShift="8.00am-3pm";
+    employee3.extraDetails="Assisting secretary on hospital paperwork.";
+    MedicalRecord.addBlock(employee3);
+
+    EmployeeData employee4;
+    time_t employee4Time;
+    employee4.employeeID=1274;
+    employee4.personName="Danton Fowlee";
+    employee4.employmentType="Full-Time";
+    employee4.departmentName="General Practitioner";
+    employee4.branchLocation="Semenyih, Selangor";
+    employee4.timestamp=time(&employee4Time);
+    employee4.pastShift="6.00pm-8.00pm";
+    employee4.currentShift="8.00am-3pm";
+    employee4.upcomingShift="6.00pm-8.00pm";
+    employee4.extraDetails="General Practitioner for normal illnesses";
+    MedicalRecord.addBlock(employee4);
+
+    EmployeeData employee5;
+    time_t employee5Time;
+    employee5.employeeID=9188;
+    employee5.personName="Frederich Heisel";
+    employee5.employmentType="Full-Time";
+    employee5.departmentName="Radiology-Head of Staff";
+    employee5.branchLocation="Semenyih, Selangor";
+    employee5.timestamp=time(&employee5Time);
+    employee5.pastShift="6.00pm-8.00pm";
+    employee5.currentShift="10.00am-2pm";
+    employee5.upcomingShift="6.00pm-8.00pm";
+    employee5.extraDetails="Radiology Staff responsible for XRAY procedures";
+    MedicalRecord.addBlock(employee5);
+
+    EmployeeData employee6;
+    time_t employee6Time;
+    employee6.employeeID=7781;
+    employee6.personName="Hille Grant";
+    employee6.employmentType="Full-Time";
+    employee6.departmentName="Cardiologist-Specialist";
+    employee6.branchLocation="Semenyih, Selangor";
+    employee6.timestamp=time(&employee6Time);
+    employee6.pastShift="Standby:11.00am-5.00am";
+    employee6.currentShift="8.00am-6.00pm";
+    employee6.upcomingShift="Standby:11.00am-5.00am";
+    employee6.extraDetails="Cadiologist specialist on standby at night";
+    MedicalRecord.addBlock(employee6);
 
 // Display the current and previous hash for each block in the chain
     for (int i = 0; i < MedicalRecord.chain.size(); i++) {
@@ -224,14 +283,12 @@ int main (){
         cout << "Current Hash: " << MedicalRecord.chain[i].getHash() << endl;
         cout << "Previous Hash: " << MedicalRecord.chain[i].getPreviousHash() << endl;
         cout << "__________Data__________" << endl;
-        cout << MedicalRecord.chain[i].getDataString()<< endl;
+        cout << MedicalRecord.chain[i].getEmployeeData()<< endl;
+        cout << MedicalRecord.chain[i].getEmployeeShift()<< endl;
+        cout << MedicalRecord.chain[i].getEmployeeExtraInfo()<< endl;
         cout << "________________________" << endl;
         cout <<""<<endl;
     }
-
-
-    cout<<"Is chain valid?"<<endl;
-    cout<<MedicalRecord.isChainValid()<<endl;
 
     return 0;
 }
