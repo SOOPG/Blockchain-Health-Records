@@ -88,9 +88,9 @@ size_t Block::generateHash(){
     hash<string> hash1;
     hash<size_t> hash2;
     hash<size_t> finalHash;
-    string toHash = to_string(data.employeeID)+ to_string(data.timestamp);
-
-    return finalHash(hash1(toHash)+hash2(previousBlockHash));
+    string toHash = to_string(data.employeeID) + to_string(data.timestamp);
+    size_t fullHash = finalHash(hash1(toHash) + hash2(previousBlockHash));
+    return fullHash % 10000000000; // get only the first 10 digits
 }
 
 size_t Block::getHash(){
@@ -147,8 +147,9 @@ Block Blockchain::createGenesisBlock(){
 
     hash<string>hash1;
     string hashStr = "genesis";
-    size_t previousBlockHash = hash1(hashStr);
-    size_t currentBlockHash = hash1(hashStr);  // current hash is equal to previous hash
+    // get only the first 10 digits of previous hash and current hash
+    size_t previousBlockHash = hash1(hashStr)% 10000000000;
+    size_t currentBlockHash = hash1(hashStr)% 10000000000;  // current hash is equal to previous hash
     Block genesis(1, previousBlockHash, employee1);
     genesis.currentBlockHash = currentBlockHash;  // set the current hash of genesis block to be equal to the previous hash of the same block
     return genesis;
