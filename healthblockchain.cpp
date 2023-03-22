@@ -8,7 +8,6 @@
 
 using namespace std;
 
-    //create a public information
 struct EmployeeData{
 
     time_t timestamp;
@@ -34,10 +33,11 @@ struct EmployeeData{
 
 };
 
+//Block class
 class Block{
 
     private:
-        //INDEX
+        //Index of Block
         int blockIndex;
 
         //previous hashed block
@@ -47,7 +47,7 @@ class Block{
 
 
     public:
-        //Constructor for block
+        //Call the Constructor Function
         Block(int blockIndex,size_t previousBlockHash,EmployeeData d);
         //Get Original Hash
         size_t getHash();
@@ -58,7 +58,7 @@ class Block{
         //Employee Data
         EmployeeData data;
 
-        //Get the data
+        //Get the employee data
          string getEmployeeData(){
             string employeeData = "";
             employeeData += "Employee ID: " + to_string(data.employeeID) + "\n";
@@ -70,6 +70,7 @@ class Block{
             return employeeData;
         }
 
+        //Get Employee Work Shift
         string getEmployeeShift(){
             string employeeShift = "";
             employeeShift +="Previous Shift: " + data.pastShift + "\n";
@@ -78,20 +79,19 @@ class Block{
             return employeeShift;
         }
 
+        //Get Extra Employee Information
         string getEmployeeExtraInfo(){
         string employeeExtraInfo= "";
          employeeExtraInfo += "More Details: "+ data.extraDetails + "\n";
         return employeeExtraInfo;
         }
 
-        //Validate Hash
-        bool isHashValid();
 };
 
-//Constructor of block
+//Constructor of Block
 Block::Block(int idx,size_t previousBlockHash,EmployeeData d){
 
-    //Position of Block
+    //Index of Block
     blockIndex=idx;
     //Data in the Block
     data=d;
@@ -120,11 +120,6 @@ size_t Block::getPreviousHash(){
     return previousBlockHash;
 }
 
-bool Block::isHashValid(){
-    return generateHash()==currentBlockHash;
-}
-
-
 //Blockchain Class
 class Blockchain{
 
@@ -137,7 +132,6 @@ class Blockchain{
         Blockchain();
 
         void addBlock(EmployeeData data);
-        bool isChainValid();
 
         Block *getLatestBlock();
 
@@ -174,7 +168,7 @@ Block Blockchain::createGenesisBlock(){
     return genesis;
 }
 
-//Get the latest added block (BUG)
+//Get the latest added block
 Block *Blockchain::getLatestBlock(){
         return &chain.back();
 }
