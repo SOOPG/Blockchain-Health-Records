@@ -133,6 +133,7 @@ class Blockchain{
 
         void addBlock(EmployeeData data);
 
+        //Pointer to the latest block
         Block *getLatestBlock();
 
 };
@@ -185,7 +186,6 @@ int main (){
     //Start Blockchain
     Blockchain MedicalRecord;
 
-    //Added 1st Block (genesis) data
     EmployeeData employee1;
     time_t employee1Time;
     employee1.employeeID=2522;
@@ -271,7 +271,7 @@ int main (){
     employee6.extraDetails="Cadiologist specialist on standby at night";
     MedicalRecord.addBlock(employee6);
 
-// Display the current and previous hash for each block in the chain
+// Display the current and previous hash for each block in the chain and also employee data
     for (int i = 0; i < MedicalRecord.chain.size(); i++) {
         cout << "Block " << i << ":" << endl;
         cout << "Current Hash: " << MedicalRecord.chain[i].getHash() << endl;
